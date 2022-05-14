@@ -1,0 +1,82 @@
+services:
+  # Zabbix 5.0
+  database-zabbix-50:
+    image: postgres:11
+    networks:
+      - zabbix-50
+    environment:
+      POSTGRES_USER: "zabbix"
+      POSTGRES_PASSWORD: "zabbix_pwd"
+      POSTGRES_DB: "zabbix"
+
+  zabbix-server-pgsql-50:
+    image: zabbix/zabbix-server-pgsql:alpine-5.0-latest
+    networks:
+      - zabbix-50
+    environment:
+      DB_SERVER_HOST: database-zabbix-50
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+    depends_on:
+      - "database-zabbix-50"
+
+  zabbix-web-nginx-pgsql-50:
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-5.0-latest
+    ports:
+      - "8085:8080"
+    networks:
+      - zabbix-50
+    environment:
+      ZBX_SERVER_HOST: zabbix-server-pgsql-50
+      DB_SERVER_HOST: database-zabbix-50
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+    depends_on:
+      - "database-zabbix-50"
+      - "zabbix-server-pgsql-50"
+
+  # Zabbix 6.0
+  database-zabbix-60:
+    image: postgres:14
+    networks:
+      - zabbix-60
+    environment:
+      POSTGRES_USER: "zabbix"
+      POSTGRES_PASSWORD: "zabbix_pwd"
+      POSTGRES_DB: "zabbix"
+
+  zabbix-server-pgsql-60:
+    image: zabbix/zabbix-server-pgsql:alpine-6.0-latest
+    networks:
+      - zabbix-60
+    environment:
+      DB_SERVER_HOST: database-zabbix-60
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+    depends_on:
+      - "database-zabbix-60"
+
+  zabbix-web-nginx-pgsql-60:
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-6.0-latest
+    ports:
+      - "8086:8080"
+    networks:
+      - zabbix-60
+    environment:
+      ZBX_SERVER_HOST: zabbix-server-pgsql-60
+      DB_SERVER_HOST: database-zabbix-60
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+    depends_on:
+      - "database-zabbix-60"
+      - "zabbix-server-pgsql-60"
+
+
+
+networks:
+  zabbix-50: {}
+  zabbix-60: {}
