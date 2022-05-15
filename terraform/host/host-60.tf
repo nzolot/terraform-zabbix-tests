@@ -16,7 +16,12 @@ resource "zabbix_host" "zabbix60" {
   host      = "test-host"
   monitored = true
   groups    = [zabbix_host_group.zabbix60.name]
-  macro     = {}
+  macro     = {
+    KEY = "value"
+  }
+  tags = {
+    test = "yes"
+  }
   templates = []
 
   interfaces {
@@ -24,4 +29,8 @@ resource "zabbix_host" "zabbix60" {
     dns  = "test.local"
     main = true
   }
+}
+
+output "zabbix_host_zabbix60" {
+  value = zabbix_host.zabbix60
 }
