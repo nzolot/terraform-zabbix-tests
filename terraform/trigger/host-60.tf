@@ -7,13 +7,13 @@ provider "zabbix" {
 
 resource "zabbix_host_group" "zabbix60" {
   provider = zabbix.zabbix60
-  name     = "Test Group"
+  name     = "Test Group2"
 }
 
 resource "zabbix_host" "zabbix60" {
   provider  = zabbix.zabbix60
-  name      = "test-host"
-  host      = "test-host"
+  name      = "test-host2"
+  host      = "test-host2"
   monitored = true
   groups    = [zabbix_host_group.zabbix60.name]
   macro     = {
@@ -24,6 +24,8 @@ resource "zabbix_host" "zabbix60" {
   }
   templates = []
 
+  proxy_hostid = zabbix_proxy.test.id
+
   interfaces {
     ip   = "127.0.0.1"
     dns  = "test.local"
@@ -31,6 +33,6 @@ resource "zabbix_host" "zabbix60" {
   }
 }
 
-output "zabbix_host_zabbix60" {
-  value = zabbix_host.zabbix60
-}
+#output "zabbix_host_zabbix60" {
+#  value = zabbix_host.zabbix60
+#}
