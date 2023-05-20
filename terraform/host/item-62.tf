@@ -20,6 +20,63 @@ resource "zabbix_item" "zabbix62" {
   host_id      = data.zabbix_host.zabbix62.host_id
   interface_id = data.zabbix_host.zabbix62.main_interface_id
 
+  preprocessing {
+    type                 = 12
+    params               = "first"
+    error_handler        = "0"
+    error_handler_params = ""
+  }
+
+  preprocessing {
+    type                 = 12
+    params               = "xx"
+    error_handler        = "0"
+    error_handler_params = ""
+  }
+
+  preprocessing {
+    type                 = 21
+    params               = "hello worldx"
+    error_handler        = "0"
+    error_handler_params = ""
+  }
+
+
+  tags = {
+    test = "true"
+    x    = false
+  }
+}
+
+resource "zabbix_item" "zabbix62_dependent" {
+  provider     = zabbix.zabbix62
+  status       = 1
+  name         = "Test dependent"
+  type         = 18
+  value_type   = 3
+  key          = "dependent.test1"
+  description  = "Dependent Test #1"
+  history      = "1w"
+  trends       = "90d"
+  host_id      = data.zabbix_host.zabbix62.host_id
+
+  master_itemid = zabbix_item.zabbix62.id
+
+  preprocessing {
+    type                 = 12
+    params               = "first"
+    error_handler        = "0"
+    error_handler_params = ""
+  }
+
+  preprocessing {
+    type                 = 12
+    params               = "xx"
+    error_handler        = "0"
+    error_handler_params = ""
+  }
+
+
   tags = {
     test = "true"
     x = false
