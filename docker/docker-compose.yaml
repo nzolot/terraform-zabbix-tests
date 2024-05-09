@@ -1,42 +1,4 @@
 services:
-  # Zabbix 5.0
-  database-zabbix-50:
-    image: postgres:11
-    networks:
-      - zabbix-50
-    environment:
-      POSTGRES_USER: "zabbix"
-      POSTGRES_PASSWORD: "zabbix_pwd"
-      POSTGRES_DB: "zabbix"
-
-  zabbix-server-pgsql-50:
-    image: zabbix/zabbix-server-pgsql:alpine-5.0-latest
-    networks:
-      - zabbix-50
-    environment:
-      DB_SERVER_HOST: database-zabbix-50
-      POSTGRES_DB: zabbix
-      POSTGRES_USER: zabbix
-      POSTGRES_PASSWORD: zabbix_pwd
-    depends_on:
-      - "database-zabbix-50"
-
-  zabbix-web-nginx-pgsql-50:
-    image: zabbix/zabbix-web-nginx-pgsql:alpine-5.0-latest
-    ports:
-      - "8085:8080"
-    networks:
-      - zabbix-50
-    environment:
-      ZBX_SERVER_HOST: zabbix-server-pgsql-50
-      DB_SERVER_HOST: database-zabbix-50
-      POSTGRES_DB: zabbix
-      POSTGRES_USER: zabbix
-      POSTGRES_PASSWORD: zabbix_pwd
-    depends_on:
-      - "database-zabbix-50"
-      - "zabbix-server-pgsql-50"
-
   # Zabbix 6.0
   database-zabbix-60:
     image: postgres:14
@@ -95,7 +57,7 @@ services:
       POSTGRES_USER: zabbix
       POSTGRES_PASSWORD: zabbix_pwd
     depends_on:
-      - "database-zabbix-60"
+      - "database-zabbix-62"
 
   zabbix-web-nginx-pgsql-62:
     image: zabbix/zabbix-web-nginx-pgsql:alpine-6.2-latest
@@ -113,7 +75,47 @@ services:
       - "database-zabbix-62"
       - "zabbix-server-pgsql-62"
 
+
+  # Zabbix 6.4
+  database-zabbix-64:
+    image: postgres:14
+    networks:
+      - zabbix-64
+    environment:
+      POSTGRES_USER: "zabbix"
+      POSTGRES_PASSWORD: "zabbix_pwd"
+      POSTGRES_DB: "zabbix"
+
+  zabbix-server-pgsql-64:
+    image: zabbix/zabbix-server-pgsql:alpine-6.4-latest
+    networks:
+      - zabbix-64
+    environment:
+      DB_SERVER_HOST: database-zabbix-64
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+    depends_on:
+      - "database-zabbix-64"
+
+  zabbix-web-nginx-pgsql-64:
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-6.4-latest
+    ports:
+      - "8088:8080"
+    networks:
+      - zabbix-64
+    environment:
+      ZBX_SERVER_HOST: zabbix-server-pgsql-64
+      DB_SERVER_HOST: database-zabbix-64
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_pwd
+    depends_on:
+      - "database-zabbix-64"
+      - "zabbix-server-pgsql-64"
+
+
 networks:
-  zabbix-50: {}
   zabbix-60: {}
   zabbix-62: {}
+  zabbix-64: {}
